@@ -1,0 +1,37 @@
+.gemini
+# CMake Build Directories
+build/
+bin/
+lib/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+*.cmake
+_CPack_Packages/
+CPackConfig.cmake
+CPackSourceConfig.cmake
+temp/
+# Visual Studio / MSVC artifacts
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.dir/
+*.pdb
+*.ilk
+*.exp
+*.lib
+.vs/
+x64/
+Debug/
+Release/
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Local binaries (if any)
+imggetpixels
+imggetpixels.exe
