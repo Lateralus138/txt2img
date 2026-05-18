@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2025, macos-latest]
+        os: [ubuntu-latest, windows-2025-vs2026, macos-latest]
         build_type: [Release]
 
     steps:
@@ -36,14 +36,14 @@ jobs:
       run: brew list freetype || brew install freetype
 
     - name: Install Dependencies (Windows)
-      if: matrix.os == 'windows-2025'
+      if: matrix.os == 'windows-2025-vs2026'
       run: |
         vcpkg install freetype:x64-windows
         echo "CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
 
     - name: Configure CMake
       run: |
-        if [[ "${{ matrix.os }}" == "windows-2025" ]]; then
+        if [[ "${{ matrix.os }}" == "windows-2025-vs2026" ]]; then
           cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
         else
           cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
@@ -69,7 +69,7 @@ jobs:
       run: ./build/txt2img --version
 
     - name: Test (Windows)
-      if: matrix.os == 'windows-2025'
+      if: matrix.os == 'windows-2025-vs2026'
       run: ./build/Release/txt2img.exe --version
 
     - name: Upload Artifacts
@@ -77,14 +77,14 @@ jobs:
       with:
         name: txt2img-${{ matrix.os }}
         path: |
-          ${{ matrix.os == 'windows-2025' && 'build/Release/txt2img.exe' || (matrix.os == 'ubuntu-latest' && 'build/txt2img*.deb' || 'build/txt2img') }}
+          ${{ matrix.os == 'windows-2025-vs2026' && 'build/Release/txt2img.exe' || (matrix.os == 'ubuntu-latest' && 'build/txt2img*.deb' || 'build/txt2img') }}
           ${{ matrix.os == 'ubuntu-latest' && 'build/txt2img' || '' }}
 
   flatpak:
     name: Build Flatpak
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+      image: bilelmoussaoui/flatpak-github-actions:freedesktop-25.08
       options: --privileged
     steps:
     - uses: actions/checkout@v6
@@ -123,8 +123,8 @@ jobs:
           cp artifacts/txt2img-ubuntu-latest/*.deb release/
         fi
         # Windows binary
-        if [ -f "artifacts/txt2img-windows-2025/txt2img.exe" ]; then
-          cp artifacts/txt2img-windows-2025/txt2img.exe release/txt2img-windows.exe
+        if [ -f "artifacts/txt2img-windows-2025-vs2026/txt2img.exe" ]; then
+          cp artifacts/txt2img-windows-2025-vs2026/txt2img.exe release/txt2img-windows.exe
         fi
         # macOS binary
         if [ -f "artifacts/txt2img-macos-latest/txt2img" ]; then
