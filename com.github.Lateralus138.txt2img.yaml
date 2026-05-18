@@ -1,6 +1,6 @@
 app-id: com.github.Lateralus138.txt2img
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: txt2img
 separate-locales: false
