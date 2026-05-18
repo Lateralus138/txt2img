@@ -33,5 +33,11 @@ Release/
 *.pch
 
 # Local binaries (if any)
-imggetpixels
-imggetpixels.exe
+txt2img
+txt2img.exe
+txt2img-linux
+txt2img-macos
+release/
+debian/changelog
+!debian/changelog.in
+

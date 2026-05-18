@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Text 2 Image
+Comment=Render wrapped text into an image
+Exec=txt2img %f
+Icon=com.github.Lateralus138.txt2img
+Terminal=true
+Categories=Graphics;Utility;
+Keywords=text;image;render;cli;

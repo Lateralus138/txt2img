@@ -1,0 +1,60 @@
+name: Flathub Submission
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. v1.0.0)'
+        required: true
+      commit:
+        description: 'Commit hash to release'
+        required: true
+
+jobs:
+  flathub:
+    name: Prepare and Test Flathub Submission
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Prepare Manifest and Metainfo
+      run: |
+        # Update manifest
+        sed -i "s/tag: .*/tag: ${{ github.event.inputs.version }}/" flathub/com.github.Lateralus138.txt2img.yaml
+        sed -i "s/commit: .*/commit: ${{ github.event.inputs.commit }}/" flathub/com.github.Lateralus138.txt2img.yaml
+        
+        # Update metainfo releases
+        CURRENT_DATE=$(date +%Y-%m-%d)
+        # Remove old releases and add new one
+        sed -i '/<releases>/,/<\/releases>/c\  <releases>\n    <release version="'"${{ github.event.inputs.version }}"'" date="'"$CURRENT_DATE"'" />\n  </releases>' docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+        
+        echo "Updated Manifest:"
+        cat flathub/com.github.Lateralus138.txt2img.yaml
+        echo "Updated Metainfo:"
+        cat docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+
+    - name: Validate AppStream
+      run: |
+        appstream-util validate docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+
+    - name: Build and Test Flatpak
+      run: |
+        flatpak-builder --user --disable-ro-bind --repo=repo --force-clean build-dir flathub/com.github.Lateralus138.txt2img.yaml
+        flatpak build-bundle repo txt2img-test.flatpak com.github.Lateralus138.txt2img
+
+    - name: Upload Test Bundle
+      uses: actions/upload-artifact@v7
+      with:
+        name: txt2img-flathub-test
+        path: txt2img-test.flatpak
+
+    - name: Instructions for Submission
+      run: |
+        echo "Flathub submission prepared and tested."
+        echo "To submit to Flathub:"
+        echo "1. Clone your Flathub repository: git clone https://github.com/flathub/com.github.Lateralus138.txt2img"
+        echo "2. Copy the manifest from flathub/com.github.Lateralus138.txt2img.yaml to the Flathub repo."
+        echo "3. Commit and push to the Flathub repo."

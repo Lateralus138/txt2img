@@ -1,0 +1,236 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ master, dev ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ master, dev ]
+  workflow_dispatch:
+
+env:
+  RELEASE_TITLE: "Text 2 Image"
+  RELEASE_FILE: "./docs/md/release.md"
+  PRERELEASE_FILE: "./docs/md/pre-release.md"
+  PRERELEASE: false
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        build_type: [Release]
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Install Dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get update && sudo apt-get install -y libfreetype-dev
+
+    - name: Install Dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: brew install freetype
+
+    - name: Install Dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        vcpkg install freetype:x64-windows
+        echo "CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+
+    - name: Configure CMake
+      run: |
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+        else
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        fi
+      shell: bash
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }}
+
+    - name: Generate Debian Package (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        cd build
+        cpack -G DEB
+      shell: bash
+
+    - name: Test (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: ./build/txt2img --version
+
+    - name: Test (macOS)
+      if: matrix.os == 'macos-latest'
+      run: ./build/txt2img --version
+
+    - name: Test (Windows)
+      if: matrix.os == 'windows-latest'
+      run: ./build/Release/txt2img.exe --version
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: txt2img-${{ matrix.os }}
+        path: |
+          ${{ matrix.os == 'windows-latest' && 'build/Release/txt2img.exe' || (matrix.os == 'ubuntu-latest' && 'build/txt2img*.deb' || 'build/txt2img') }}
+          ${{ matrix.os == 'ubuntu-latest' && 'build/txt2img' || '' }}
+
+  flatpak:
+    name: Build Flatpak
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v5
+    - name: Build Flatpak
+      run: |
+        flatpak-builder --user --disable-ro-bind --repo=repo --force-clean build-dir com.github.Lateralus138.txt2img.yaml
+        flatpak build-bundle repo txt2img.flatpak com.github.Lateralus138.txt2img
+    - name: Upload Flatpak
+      uses: actions/upload-artifact@v7
+      with:
+        name: txt2img-flatpak
+        path: txt2img.flatpak
+
+  release:
+    name: Create Release
+    needs: [build, flatpak]
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v8
+      with:
+        path: artifacts
+
+    - name: Rename and Prepare Binaries
+      run: |
+        mkdir -p release
+        # Linux binary
+        if [ -f "artifacts/txt2img-ubuntu-latest/txt2img" ]; then
+          cp artifacts/txt2img-ubuntu-latest/txt2img release/txt2img-linux
+        fi
+        # Debian package
+        if ls artifacts/txt2img-ubuntu-latest/*.deb 1> /dev/null 2>&1; then
+          cp artifacts/txt2img-ubuntu-latest/*.deb release/
+        fi
+        # Windows binary
+        if [ -f "artifacts/txt2img-windows-latest/txt2img.exe" ]; then
+          cp artifacts/txt2img-windows-latest/txt2img.exe release/txt2img-windows.exe
+        fi
+        # macOS binary
+        if [ -f "artifacts/txt2img-macos-latest/txt2img" ]; then
+          cp artifacts/txt2img-macos-latest/txt2img release/txt2img-macos
+        fi
+        # Flatpak bundle
+        if [ -f "artifacts/txt2img-flatpak/txt2img.flatpak" ]; then
+          cp artifacts/txt2img-flatpak/txt2img.flatpak release/
+        fi
+        ls -lh release/
+
+    - name: Generate and Commit SHA256 JSON Badges
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: |
+        mkdir -p docs/json
+
+        if [ -f "release/txt2img-windows.exe" ]; then
+          WIN_HASH=$(sha256sum release/txt2img-windows.exe | cut -d ' ' -f1)
+          cat > docs/json/txt2img-windows_x64_sha256.json << EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-windows.exe SHA256",
+            "message": "${WIN_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "windows"
+          }
+EOF
+        fi
+
+        if [ -f "release/txt2img-linux" ]; then
+          LINUX_HASH=$(sha256sum release/txt2img-linux | cut -d ' ' -f1)
+          cat > docs/json/txt2img-linux_x64_sha256.json << EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-linux SHA256",
+            "message": "${LINUX_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "linux"
+          }
+EOF
+        fi
+
+        if [ -f "release/txt2img-macos" ]; then
+          MACOS_HASH=$(sha256sum release/txt2img-macos | cut -d ' ' -f1)
+          cat > docs/json/txt2img-macos_x64_sha256.json << EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-macos SHA256",
+            "message": "${MACOS_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "apple"
+          }
+EOF
+        fi
+
+        git config --global user.name 'Lateralus138'
+        git config --global user.email 'Lateralus138@users.noreply.github.com'
+        git add docs/json/*.json
+        git commit --allow-empty -m "Update SHA256 hash badges. - $(date -u) UTC"
+        git push origin master
+
+    - name: Read Version
+      id: version
+      run: |
+        VERSION=$(cat VERSION)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Determine Release Body File
+      id: release-body
+      run: |
+        if [ "${{ env.PRERELEASE }}" = "true" ]; then
+          echo "body_file=${{ env.PRERELEASE_FILE }}" >> $GITHUB_OUTPUT
+        else
+          echo "body_file=${{ env.RELEASE_FILE }}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Read Release Body
+      id: release-content
+      run: |
+        BODY=$(cat ${{ steps.release-body.outputs.body_file }})
+        {
+          echo "body<<EOF"
+          echo "$BODY"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: ${{ env.RELEASE_TITLE }} - ${{ github.ref_name }}
+        body: ${{ steps.release-content.outputs.body }}
+        files: |
+          release/txt2img-linux
+          release/txt2img-windows.exe
+          release/txt2img-macos
+          release/*.deb
+          release/txt2img.flatpak
+        prerelease: ${{ env.PRERELEASE }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,5 @@
+txt2img (@PROJECT_VERSION@) unstable; urgency=low
+
+  * Release @PROJECT_VERSION@
+
+ -- @CPACK_PACKAGE_VENDOR@ <faithnomoread@yahoo.com>  @CURRENT_RFC2822_DATE@

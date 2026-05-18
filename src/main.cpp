@@ -29,6 +29,8 @@
 
 namespace fs = std::filesystem;
 
+#include "version.h"
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
@@ -557,6 +559,7 @@ struct Config {
 
 static void setup_args(argparser::ArgumentParser& p) {
     using namespace argparser;
+    p.add_switch_pair("v", "version",          "\tShow version information",    SwitchType::FLAG,      Requirement::OPTIONAL);
     p.add_switch_pair("h", "help",             "\tShow help message",           SwitchType::FLAG,      Requirement::OPTIONAL);
     p.add_switch_pair("t", "text",             "\tDirect text input",           SwitchType::PARAMETER, Requirement::OPTIONAL);
     p.add_switch_pair("W", "width",            "\tImage width",                 SwitchType::PARAMETER, Requirement::REQUIRED);
@@ -740,13 +743,25 @@ int main(int argc, char* argv[]) {
         try {
             parser.parse();
         } catch (const std::exception&) {
-            // If the user passed -h/--help, parse() may have thrown (--width required).
-            // Show help and exit cleanly in that case.
-            if (argc > 1 && (std::string_view(argv[1]) == "-h" || std::string_view(argv[1]) == "--help")) {
-                parser.print_help(HELP_HEADER, true);
-                return 0;
+            // If the user passed help or version flags, parse() may have thrown (e.g. --width required).
+            // Check for these flags manually to exit cleanly.
+            for (int i = 1; i < argc; ++i) {
+                std::string_view arg(argv[i]);
+                if (arg == "-h" || arg == "--help") {
+                    parser.print_help(HELP_HEADER, true);
+                    return 0;
+                }
+                if (arg == "-v" || arg == "--version") {
+                    std::cout << "txt2img version " << PROJECT_VERSION << "\n";
+                    return 0;
+                }
             }
             throw;
+        }
+
+        if (parser.is_switch_set("version")) {
+            std::cout << "txt2img version " << PROJECT_VERSION << "\n";
+            return 0;
         }
 
         if (parser.is_switch_set("help")) {

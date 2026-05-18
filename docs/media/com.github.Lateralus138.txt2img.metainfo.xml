@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.Lateralus138.txt2img</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0-only</project_license>
+  <name>Text 2 Image</name>
+  <summary>Render wrapped text into an image</summary>
+  <description>
+    <p>
+      Text 2 Image is a cross-platform command-line utility designed for rendering wrapped text into images.
+      It supports ANSI styles, word wrapping, and multi-page output.
+    </p>
+  </description>
+  <launchable type="desktop-id">txt2img.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Help screen</caption>
+      <image>https://raw.githubusercontent.com/Lateralus138/txt2img/master/docs/media/screenshots/help.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/Lateralus138/txt2img</url>
+  <provides>
+    <binary>txt2img</provides>
+  </provides>
+  <releases>
+    <release version="1.0.0" date="2026-05-17" />
+  </releases>
+  <content_rating type="oars-1.1" />
+</component>

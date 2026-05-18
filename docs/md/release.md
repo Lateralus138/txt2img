@@ -1,37 +1,36 @@
 # Release Information
 
-## Current Release: v1.1.0
+## Current Release: v1.0.0
 
 ### Release Date
-March 22, 2026
+May 17, 2026
 
 ### Overview
-This release introduces significant new features, including perceptually accurate color matching using the CIEDE2000 formula, smart image resizing, and direct image output support.
+This is the initial release of Text 2 Image, a lightweight CLI tool to render text (including ANSI-styled text) into high-quality images with word wrapping and multi-page support.
 
 ### Downloads
-- **Windows**: `imggetpixels-windows.exe` - Native Windows x64 executable
-- **Linux**: `imggetpixels-linux` - Native Linux x64 binary
+- **Windows**: `txt2img-windows.exe` - Native Windows x64 executable
+- **Linux**: `txt2img-linux` - Native Linux x64 binary
+- **macOS**: `txt2img-macos` - Native macOS x64 binary
 
 ### System Requirements
 - **Windows**: Windows 10 or later (x64)
-- **Linux**: Any modern distribution (x64) with standard C++ libraries
+- **Linux**: Any modern distribution (x64) with FreeType
+- **macOS**: macOS 10.15 or later (x64/ARM)
 
-### New in v1.1.0
-- **CIEDE2000 Color Matching**: Highly accurate color matching against palettes.
-- **Smart Resizing**: Resize images on-the-fly with smooth interpolation.
-- **Direct Image Output**: Save your results directly to PNG, BMP, TGA, or JPG.
-- **Enhanced CLI**: New options for mixed palette formats and improved help documentation.
+### Features
+- **ANSI Styling**: Preserve terminal colors and styles in your images.
+- **Smart Wrapping**: Automatically wrap long lines of text.
+- **Multi-paging**: Render long documents into sequential image pages.
+- **Highly Configurable**: Adjust colors, fonts, padding, and more.
 
-### Quick Start (New Features)
+### Quick Start
 ```bash
-# Resize and save to a new file
-imggetpixels -R 64x64 -O thumb.png input.jpg
+# Render a file with wrapping at 800px width
+txt2img -W 800 input.txt -n output.png
 
-# Match pixels against a palette and save
-imggetpixels -C "#000000;#FFFFFF;#FF0000" -O mapped.png input.png
-
-# Combine resizing and palette matching
-imggetpixels -R 32x32 -C "0x000000;0x00FF00" -O sprite.png input.png
+# Render styled text from stdin
+echo -e "\e[31mRed Text\e[0m" | txt2img -W 400 -n styled.png
 ```
 
 ## Changelog
@@ -40,16 +39,6 @@ See [Changelog](./docs/md/reference/changelog.md)
 
 ---
 
-## Previous Releases
-
-- **v1.0.0** (January 9, 2026): Initial stable release.
-
-## Support
-
-For issues, feature requests, or questions:
-- [GitHub Issues](https://github.com/Lateralus138/imggetpixels/issues)
-- [GitHub Discussions](https://github.com/Lateralus138/imggetpixels/discussions)
-
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See [LICENSE](../../LICENSE) for details.
+This project is dual-licensed under AGPLv3 and a Commercial License. See [LICENSE](../../LICENSE) and [COMMERCIAL_LICENSE.md](../../COMMERCIAL_LICENSE.md) for details.

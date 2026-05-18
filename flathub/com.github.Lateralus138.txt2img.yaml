@@ -1,0 +1,24 @@
+app-id: com.github.Lateralus138.txt2img
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: txt2img
+separate-locales: false
+finish-args:
+  - --device=all
+  - --filesystem=host
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+
+modules:
+  - name: txt2img
+    buildsystem: cmake-ninja
+    sources:
+      - type: git
+        url: https://github.com/Lateralus138/txt2img.git
+        tag: v1.0.0
+        commit: dfc824724cd603cb7589db82c426e71429ff140c
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_STATIC=OFF

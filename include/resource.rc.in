@@ -1,0 +1,40 @@
+#include <windows.h>
+
+#define IDI_ICON1 1
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "@PROJECT_ICON_PATH@"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+ PRODUCTVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Ian Pride\0"
+            VALUE "FileDescription", "Render wrapped text into an image\0"
+            VALUE "FileVersion", "@PROJECT_VERSION@\0"
+            VALUE "InternalName", "txt2img\0"
+            VALUE "LegalCopyright", "Copyright (C) @COPYRIGHT_YEAR@\0"
+            VALUE "OriginalFilename", "txt2img.exe\0"
+            VALUE "ProductName", "txt2img\0"
+            VALUE "ProductVersion", "@PROJECT_VERSION@\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
