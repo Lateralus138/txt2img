@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>AGPL-3.0-only</project_license>
   <name>Text 2 Image</name>
+  <developer_name>Ian Pride</developer_name>
   <summary>Render wrapped text into an image</summary>
   <description>
     <p>
@@ -19,8 +20,13 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/Lateralus138/txt2img</url>
+  <url type="bugtracker">https://github.com/Lateralus138/txt2img/issues</url>
+  <categories>
+    <category>Graphics</category>
+    <category>Utility</category>
+  </categories>
   <provides>
-    <binary>txt2img</provides>
+    <binary>txt2img</binary>
   </provides>
   <releases>
     <release version="1.0.0" date="2026-05-17" />

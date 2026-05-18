@@ -125,7 +125,7 @@ endif()
 
 # CPack configuration
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-set(CPACK_PACKAGE_VENDOR "Ian Pride")
+set(CPACK_PACKAGE_VENDOR "New Pride Services")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Render wrapped text into an image")
 set(CPACK_PACKAGE_DESCRIPTION "Text 2 Image is a cross-platform command-line utility designed to\n render ANSI-styled text into high-quality images. It supports word\n wrapping, multi-page output, and highly customizable formatting.")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")

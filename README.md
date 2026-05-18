@@ -217,6 +217,14 @@ All hashes are retrieved at compile/build time.
 
 ![LINUX X64 SHA256](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/txt2img/master/docs/json/txt2img-linux_x64_sha256.json)
 
+#### Current Linux DEB SHA256
+
+![LINUX DEB SHA256](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/txt2img/master/docs/json/txt2img-linux_deb_sha256.json)
+
+#### Current Linux Flatpak SHA256
+
+![LINUX Flatpak SHA256](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/txt2img/master/docs/json/txt2img-linux_flatpak_sha256.json)
+
 #### Current macOS X64 SHA256
 
 ![macOS X64 SHA256](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Lateralus138/txt2img/master/docs/json/txt2img-macos_x64_sha256.json)
