@@ -81,27 +81,29 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 # Linux specific installation
-if(LINUX)
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+
     # Desktop file
     install(FILES "docs/media/com.github.Lateralus138.txt2img.desktop"
-            DESTINATION "share/applications")
+            DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
     
     # AppStream metainfo
     install(FILES "docs/media/com.github.Lateralus138.txt2img.metainfo.xml"
-            DESTINATION "share/metainfo")
+            DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/metainfo")
     
     # Icons (hicolor theme)
     set(ICON_SIZES 16 32 48 64 128 256)
     foreach(SIZE ${ICON_SIZES})
         install(FILES "docs/media/icons/hicolor/${SIZE}x${SIZE}/apps/com.github.Lateralus138.txt2img.png"
-                DESTINATION "share/icons/hicolor/${SIZE}x${SIZE}/apps")
+                DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${SIZE}x${SIZE}/apps")
     endforeach()
     install(FILES "docs/media/icons/hicolor/scalable/apps/com.github.Lateralus138.txt2img.svg"
-            DESTINATION "share/icons/hicolor/scalable/apps")
+            DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
     # Documentation (Debian style)
     install(FILES "debian/copyright"
-            DESTINATION "share/doc/${PROJECT_NAME}")
+            DESTINATION "${CMAKE_INSTALL_DOCDIR}")
     
     # Generate Debian changelog
     string(TIMESTAMP CURRENT_RFC2822_DATE "%a, %d %b %Y %H:%M:%S %z")
@@ -111,17 +113,17 @@ if(LINUX)
     execute_process(COMMAND gzip -cn9 "${CMAKE_CURRENT_BINARY_DIR}/debian/changelog"
                     OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz"
-            DESTINATION "share/doc/${PROJECT_NAME}")
+            DESTINATION "${CMAKE_INSTALL_DOCDIR}")
 
     # Man page
     execute_process(COMMAND gzip -cn9 "${CMAKE_CURRENT_SOURCE_DIR}/docs/txt2img.1"
                     OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/txt2img.1.gz")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/txt2img.1.gz"
-            DESTINATION "share/man/man1")
+            DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
 
     # Bash completion
     install(FILES "debian/txt2img.bash-completion"
-            DESTINATION "share/bash-completion/completions"
+            DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/bash-completion/completions"
             RENAME "${PROJECT_NAME}")
 endif()
 
@@ -137,7 +139,7 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-if(LINUX)
+if(UNIX AND NOT APPLE)
     set(CPACK_GENERATOR "TGZ;DEB")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ian Pride <faithnomoread@yahoo.com>")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "libfreetype6")
