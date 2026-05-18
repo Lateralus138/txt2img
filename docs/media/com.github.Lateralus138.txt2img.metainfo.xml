@@ -31,7 +31,7 @@
     <binary>txt2img</binary>
   </provides>
   <releases>
-    <release version="1.0.0" date="2026-05-17" />
+    <release version="v1.0.0" date="2026-05-18" />
   </releases>
   <content_rating type="oars-1.1" />
 </component>
