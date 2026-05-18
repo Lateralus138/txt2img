@@ -22,14 +22,20 @@ jobs:
     
     - name: Prepare Manifest and Metainfo
       run: |
+        VERSION="${{ github.event.inputs.version }}"
+        # Ensure version starts with 'v'
+        if [[ ! $VERSION =~ ^v ]]; then
+          VERSION="v$VERSION"
+        fi
+        
         # Update manifest
-        sed -i "s/tag: .*/tag: ${{ github.event.inputs.version }}/" flathub/com.github.Lateralus138.txt2img.yaml
+        sed -i "s/tag: .*/tag: $VERSION/" flathub/com.github.Lateralus138.txt2img.yaml
         sed -i "s/commit: .*/commit: ${{ github.event.inputs.commit }}/" flathub/com.github.Lateralus138.txt2img.yaml
         
         # Update metainfo releases
         CURRENT_DATE=$(date +%Y-%m-%d)
         # Remove old releases and add new one
-        sed -i '/<releases>/,/<\/releases>/c\  <releases>\n    <release version="'"${{ github.event.inputs.version }}"'" date="'"$CURRENT_DATE"'" />\n  </releases>' docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+        sed -i '/<releases>/,/<\/releases>/c\  <releases>\n    <release version="'"$VERSION"'" date="'"$CURRENT_DATE"'" />\n  </releases>' docs/media/com.github.Lateralus138.txt2img.metainfo.xml
         
         echo "Updated Manifest:"
         cat flathub/com.github.Lateralus138.txt2img.yaml
