@@ -1,38 +1,59 @@
+# Bash completion for txt2img
+
 _txt2img() {
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
+    # All available switches
     opts="-v --version -h --help -t --text -W --width -H --height -T --trim-height -r --raw -n --file-name -o --output-directory --fg --bg --font --font-size --padding --tabsize"
 
+    # Handle completion for options that take arguments
     case "${prev}" in
         -o|--output-directory)
-            COMPREPLY=( $(compgen -d -- "${cur}") )
+            if [ -n "$(type -t _filedir)" ]; then
+                _filedir -d
+            else
+                COMPREPLY=( $(compgen -d -- "${cur}") )
+            fi
             return 0
             ;;
         --font)
-            COMPREPLY=( $(compgen -f -X '!*.[ot]tf' -- "${cur}") )
+            if [ -n "$(type -t _filedir)" ]; then
+                _filedir '@(tf|otf)'
+            else
+                COMPREPLY=( $(compgen -f -X '!*.[ot]tf' -- "${cur}") )
+            fi
             return 0
             ;;
         -n|--file-name)
-            # Default to filename completion
-            COMPREPLY=( $(compgen -f -- "${cur}") )
+            if [ -n "$(type -t _filedir)" ]; then
+                _filedir
+            else
+                COMPREPLY=( $(compgen -f -- "${cur}") )
+            fi
             return 0
             ;;
         -t|--text|-W|--width|-H|--height|--fg|--bg|--font-size|--padding|--tabsize)
-            # These expect specific values (text, numbers, colors), no specific completion
+            # These options take specific values, no completion suggested
             return 0
             ;;
     esac
 
+    # Complete switches if the current word starts with a dash
     if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
         return 0
     fi
 
-    # Fallback to file completion for the non-switch argument (input file)
-    COMPREPLY=( $(compgen -f -- "${cur}") )
+    # Otherwise, complete filenames (for the input file argument)
+    if [ -n "$(type -t _filedir)" ]; then
+        _filedir
+    else
+        COMPREPLY=( $(compgen -f -- "${cur}") )
+    fi
 }
 
+# Assign the completion function to the txt2img command
 complete -F _txt2img txt2img

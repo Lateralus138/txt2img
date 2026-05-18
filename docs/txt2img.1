@@ -1,82 +1,131 @@
 .TH TXT2IMG 1 "May 2026" "txt2img" "User Commands"
+
 .SH NAME
-txt2img \- Render ANSI-styled text into images
+txt2img \- Render ANSI-styled text into high-quality images
+
 .SH SYNOPSIS
 .B txt2img
-[\fB\-W\fR \fIwidth\fR] [\fIOPTIONS\fR] [\fIFILE\fR]
+.RB [ \-W
+.IR width ]
+.RB [ OPTIONS ]
+.RB [ FILE ]
 .br
 .B cat
-\fIFILE\fR |
+.I FILE
+|
 .B txt2img
-\fB\-W\fR \fIwidth\fR [\fIOPTIONS\fR]
+.B \-W
+.I width
+.RB [ OPTIONS ]
+
 .SH DESCRIPTION
 .B txt2img
-is a command-line utility that renders text into high-quality images. It supports ANSI escape sequences for colors and styles (bold, italic), automatic word wrapping, and multi-page output.
+is a robust command-line utility designed to render text, including text containing ANSI escape sequences (SGR), into visually appealing images. It is particularly useful for capturing terminal output, code snippets, or any text that benefits from colorization and styling.
 .PP
-If \fIFILE\fR is specified, input is read from the file. If \fIFILE\fR is omitted or is '\-', input is read from standard input.
+Key features include:
+.IP \(bu 3
+Full support for 8, 16, and 24-bit (TrueColor) ANSI colors.
+.IP \(bu 3
+Support for \fBbold\fR and \fIitalic\fR text styles.
+.IP \(bu 3
+Automatic word wrapping based on a specified pixel width.
+.IP \(bu 3
+Multi-page output when a maximum height is specified.
+.IP \(bu 3
+Customizable fonts, sizes, padding, and colors.
+.PP
+If \fIFILE\fR is provided, \fBtxt2img\fR reads from it. If \fIFILE\fR is omitted or is '\-', it reads from standard input.
+
 .SH OPTIONS
+.SS "General Options"
 .TP
-\fB\-v\fR, \fB\-\-version\fR
-Show version information and exit.
+.B \-v\fR, \fB\-\-version
+Print the version number and exit.
 .TP
-\fB\-h\fR, \fB\-\-help\fR
-Show a help message and exit.
+.B \-h\fR, \fB\-\-help
+Display a comprehensive help message and exit.
 .TP
-\fB\-t\fR, \fB\-\-text\fR \fITEXT\fR
-Provide text directly as a command-line argument. Use '\\n' for newlines.
+.BI \-t\ " text"\fR, \fB\-\-text=\fR"\fItext\fR"
+Process the provided string directly instead of reading from a file or stdin. Use '\\n' to represent literal newlines within the string.
+
+.SS "Image Dimensions"
 .TP
-\fB\-W\fR, \fB\-\-width\fR \fIWIDTH\fR
-Set the image width in pixels. This is a required parameter.
+.BI \-W\ " pixels"\fR, \fB\-\-width=\fR"\fIpixels\fR"
+(\fBRequired\fR) Set the total width of the generated image in pixels. Text will be wrapped to fit within this width minus padding.
 .TP
-\fB\-H\fR, \fB\-\-height\fR \fIHEIGHT\fR
-Set the maximum image height. If the content exceeds this height, multiple images will be generated.
+.BI \-H\ " pixels"\fR, \fB\-\-height=\fR"\fIpixels\fR"
+Set a maximum height for the image. If the rendered text exceeds this height, \fBtxt2img\fR will split the content across multiple image files.
 .TP
-\fB\-T\fR, \fB\-\-trim\-height\fR
-Trim the image height to fit the content exactly (only applicable if \fB\-\-height\fR is set).
+.B \-T\fR, \fB\-\-trim\-height
+When used with \fB\-\-height\fR, this flag ensures the last image (or the only image) is trimmed to the height of the actual content rather than using the full specified height.
+
+.SS "Rendering Control"
 .TP
-\fB\-r\fR, \fB\-\-raw\fR
-Disable ANSI escape sequence parsing and render text exactly as-is.
+.B \-r\fR, \fB\-\-raw
+Disable ANSI escape sequence parsing. Text will be rendered literally, and control characters will likely appear as placeholders or be ignored depending on the font.
+
+.SS "Output Selection"
 .TP
-\fB\-n\fR, \fB\-\-file\-name\fR \fINAME\fR
-Set the output filename (default: output.png). For multi-page output, names will be suffixed with _1, _2, etc.
+.BI \-n\ " name"\fR, \fB\-\-file\-name=\fR"\fIname\fR"
+Specify the base name for the output image(s). Defaults to \fBoutput.png\fR. For multi-page output, files are named \fIname_1.png\fR, \fIname_2.png\fR, etc.
 .TP
-\fB\-o\fR, \fB\-\-output\-directory\fR \fIDIR\fR
-Set the directory where output images will be saved (default: current directory).
+.BI \-o\ " dir"\fR, \fB\-\-output\-directory=\fR"\fIdir\fR"
+Specify the directory where the output images will be saved. Defaults to the current working directory.
+
+.SS "Styling and Formatting"
 .TP
-\fB\-\-fg\fR \fICOLOR\fR
-Set the default foreground color using a hex string (e.g., "#222222" or "222222").
+.BI \-\-fg\fR "\fI color\fR"
+Set the default foreground (text) color. Accepts hex codes like "#RRGGBB" or "RRGGBB". Defaults to a dark gray (#222222).
 .TP
-\fB\-\-bg\fR \fICOLOR\fR
-Set the default background color using a hex string (e.g., "#f6efdf").
+.BI \-\-bg\fR "\fI color\fR"
+Set the background color of the image. Accepts hex codes. Defaults to a light cream (#f6efdf).
 .TP
-\fB\-\-font\fR \fIPATH\fR
-Path to a specific TrueType (TTF) or OpenType (OTF) font file.
+.BI \-\-font\fR "\fI path\fR"
+Provide the absolute or relative path to a TrueType (.ttf) or OpenType (.otf) font file to use for rendering. If not provided, \fBtxt2img\fR attempts to find a suitable monospace font on the system.
 .TP
-\fB\-\-font\-size\fR \fISIZE\fR
-Set the font size in pixels (default: 20).
+.BI \-\-font\-size\fR "\fI pixels\fR"
+Set the font size in pixels. Defaults to 20.
 .TP
-\fB\-\-padding\fR \fIPIXELS\fR
-Set the padding around the text in pixels (default: 20).
+.BI \-\-padding\fR "\fI pixels\fR"
+Set the amount of space between the text and the edge of the image. Defaults to 20 pixels.
 .TP
-\fB\-\-tabsize\fR \fIWIDTH\fR
-Set the tab stop width (default: 4).
+.BI \-\-tabsize\fR "\fI width\fR"
+Specify the number of spaces to use for tab characters. Defaults to 4.
+
 .SH EXAMPLES
-Render a file to an image with a width of 800 pixels:
-.IP
-txt2img -W 800 input.txt
 .PP
-Render direct text with custom colors:
-.IP
-txt2img -W 400 --fg "#ffffff" --bg "#000000" -t "Hello World\nThis is a test"
+.B Basic usage with a file:
+.RS 4
+txt2img -W 800 notes.txt
+.RE
 .PP
-Pipe output from another command:
-.IP
-ls -la --color=always | txt2img -W 1000 -n directory_listing.png
+.B Using stdin and custom output:
+.RS 4
+cat log.ansi | txt2img -W 1200 -n system_log.png -o ~/Pictures
+.RE
+.PP
+.B Rendering direct text with styling:
+.RS 4
+txt2img -W 500 --fg "#00FF00" --bg "000000" -t "SUCCESS: Operation Complete\nTime: 45ms"
+.RE
+.PP
+.B Creating a multi-page document:
+.RS 4
+txt2img -W 1000 -H 1500 -T -n manual long_document.txt
+.RE
+.PP
+.B Piping from a command with colors:
+.RS 4
+ls -la --color=always | txt2img -W 900 --font "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+.RE
+
 .SH AUTHOR
 Ian Pride <faithnomoread@yahoo.com>
+
 .SH REPORTING BUGS
-https://github.com/Lateralus138/txt2img/issues
+Issues can be reported at: \fIhttps://github.com/Lateralus138/txt2img/issues\fR
+
 .SH COPYRIGHT
 Copyright \(co 2026 New Pride Services.
 .br
-License: Commercial License (see COMMERCIAL_LICENSE.md) or MIT License (see LICENSE).
+Licensed under the Commercial License or the MIT License.
