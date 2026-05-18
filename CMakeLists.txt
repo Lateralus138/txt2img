@@ -86,12 +86,9 @@ if(LINUX)
     install(FILES "docs/media/com.github.Lateralus138.txt2img.desktop"
             DESTINATION "share/applications")
     
-    # AppStream metainfo (install to both locations for compatibility)
+    # AppStream metainfo
     install(FILES "docs/media/com.github.Lateralus138.txt2img.metainfo.xml"
             DESTINATION "share/metainfo")
-    install(FILES "docs/media/com.github.Lateralus138.txt2img.metainfo.xml"
-            DESTINATION "share/appdata"
-            RENAME "com.github.Lateralus138.txt2img.appdata.xml")
     
     # Icons (hicolor theme)
     set(ICON_SIZES 16 32 48 64 128 256)

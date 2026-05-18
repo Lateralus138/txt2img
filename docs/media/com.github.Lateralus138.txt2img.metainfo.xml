@@ -4,7 +4,9 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>AGPL-3.0-only</project_license>
   <name>Text 2 Image</name>
-  <developer_name>Ian Pride</developer_name>
+  <developer id="com.github.Lateralus138">
+    <name>Ian Pride</name>
+  </developer>
   <summary>Render wrapped text into an image</summary>
   <description>
     <p>

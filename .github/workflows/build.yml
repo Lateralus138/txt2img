@@ -145,80 +145,82 @@ jobs:
         if [ -f "release/txt2img-windows.exe" ]; then
           WIN_HASH=$(sha256sum release/txt2img-windows.exe | cut -d ' ' -f1)
           cat > docs/json/txt2img-windows_x64_sha256.json << EOF
-          {
-            "schemaVersion": 1,
-            "color": "2E9778",
-            "label": "txt2img-windows.exe SHA256",
-            "message": "${WIN_HASH}",
-            "labelColor": "1d1d1d",
-            "style": "for-the-badge",
-            "namedLogo": "windows"
-          }
-          EOF
+{
+  "schemaVersion": 1,
+  "color": "2E9778",
+  "label": "txt2img-windows.exe SHA256",
+  "message": "${WIN_HASH}",
+  "labelColor": "1d1d1d",
+  "style": "for-the-badge",
+  "namedLogo": "windows"
+}
+EOF
         fi
 
         if [ -f "release/txt2img-linux" ]; then
           LINUX_HASH=$(sha256sum release/txt2img-linux | cut -d ' ' -f1)
           cat > docs/json/txt2img-linux_x64_sha256.json << EOF
-          {
-            "schemaVersion": 1,
-            "color": "2E9778",
-            "label": "txt2img-linux SHA256",
-            "message": "${LINUX_HASH}",
-            "labelColor": "1d1d1d",
-            "style": "for-the-badge",
-            "namedLogo": "linux"
-          }
-          EOF
+{
+  "schemaVersion": 1,
+  "color": "2E9778",
+  "label": "txt2img-linux SHA256",
+  "message": "${LINUX_HASH}",
+  "labelColor": "1d1d1d",
+  "style": "for-the-badge",
+  "namedLogo": "linux"
+}
+EOF
         fi
 
         if [ -f "release/txt2img-macos" ]; then
           MACOS_HASH=$(sha256sum release/txt2img-macos | cut -d ' ' -f1)
           cat > docs/json/txt2img-macos_x64_sha256.json << EOF
-          {
-            "schemaVersion": 1,
-            "color": "2E9778",
-            "label": "txt2img-macos SHA256",
-            "message": "${MACOS_HASH}",
-            "labelColor": "1d1d1d",
-            "style": "for-the-badge",
-            "namedLogo": "apple"
-          }
-          EOF
+{
+  "schemaVersion": 1,
+  "color": "2E9778",
+  "label": "txt2img-macos SHA256",
+  "message": "${MACOS_HASH}",
+  "labelColor": "1d1d1d",
+  "style": "for-the-badge",
+  "namedLogo": "apple"
+}
+EOF
         fi
 
-        if ls release/*.deb 1> /dev/null 2>&1; then
-          DEB_FILE=$(ls release/*.deb | head -n1)
+        # Debian SHA256
+        DEB_FILE=$(ls release/*.deb 2>/dev/null | head -n 1)
+        if [ -f "$DEB_FILE" ]; then
           DEB_HASH=$(sha256sum "$DEB_FILE" | cut -d ' ' -f1)
-          cat > docs/json/txt2img-deb_sha256.json << EOF
-          {
-            "schemaVersion": 1,
-            "color": "2E9778",
-            "label": "txt2img.deb SHA256",
-            "message": "${DEB_HASH}",
-            "labelColor": "1d1d1d",
-            "style": "for-the-badge",
-            "namedLogo": "debian"
-          }
-          EOF
+          cat > docs/json/txt2img-linux_deb_sha256.json << EOF
+{
+  "schemaVersion": 1,
+  "color": "2E9778",
+  "label": "txt2img.deb SHA256",
+  "message": "${DEB_HASH}",
+  "labelColor": "1d1d1d",
+  "style": "for-the-badge",
+  "namedLogo": "debian"
+}
+EOF
         fi
 
+        # Flatpak SHA256
         if [ -f "release/txt2img.flatpak" ]; then
           FLATPAK_HASH=$(sha256sum release/txt2img.flatpak | cut -d ' ' -f1)
-          cat > docs/json/txt2img-flatpak_sha256.json << EOF
-          {
-            "schemaVersion": 1,
-            "color": "2E9778",
-            "label": "txt2img.flatpak SHA256",
-            "message": "${FLATPAK_HASH}",
-            "labelColor": "1d1d1d",
-            "style": "for-the-badge",
-            "namedLogo": "flathub"
-          }
-          EOF
+          cat > docs/json/txt2img-linux_flatpak_sha256.json << EOF
+{
+  "schemaVersion": 1,
+  "color": "2E9778",
+  "label": "txt2img.flatpak SHA256",
+  "message": "${FLATPAK_HASH}",
+  "labelColor": "1d1d1d",
+  "style": "for-the-badge",
+  "namedLogo": "flathub"
+}
+EOF
         fi
 
-        git config --global user.name 'Lateralus138'
+        git config --global user.name 'New Pride Services'
         git config --global user.email 'Lateralus138@users.noreply.github.com'
         git add docs/json/*.json
         git commit --allow-empty -m "Update SHA256 hash badges. - $(date -u) UTC"
