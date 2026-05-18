@@ -154,7 +154,7 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "windows"
           }
-EOF
+          EOF
         fi
 
         if [ -f "release/txt2img-linux" ]; then
@@ -169,7 +169,7 @@ EOF
             "style": "for-the-badge",
             "namedLogo": "linux"
           }
-EOF
+          EOF
         fi
 
         if [ -f "release/txt2img-macos" ]; then
@@ -184,7 +184,7 @@ EOF
             "style": "for-the-badge",
             "namedLogo": "apple"
           }
-EOF
+          EOF
         fi
 
         git config --global user.name 'Lateralus138'
