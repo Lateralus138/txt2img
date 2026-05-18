@@ -11,7 +11,7 @@
       It supports ANSI styles, word wrapping, and multi-page output.
     </p>
   </description>
-  <launchable type="desktop-id">txt2img.desktop</launchable>
+  <launchable type="desktop-id">com.github.Lateralus138.txt2img.desktop</launchable>
   <screenshots>
     <screenshot type="default">
       <caption>Help screen</caption>
