@@ -154,7 +154,7 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "windows"
           }
-          EOF
+        EOF
         fi
 
         if [ -f "release/txt2img-linux" ]; then
@@ -169,7 +169,7 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "linux"
           }
-          EOF
+        EOF
         fi
 
         if [ -f "release/txt2img-macos" ]; then
@@ -184,7 +184,7 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "apple"
           }
-          EOF
+        EOF
         fi
 
         # Debian SHA256
@@ -201,7 +201,7 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "debian"
           }
-          EOF
+        EOF
         fi
 
         # Flatpak SHA256
@@ -217,10 +217,10 @@ jobs:
             "style": "for-the-badge",
             "namedLogo": "flathub"
           }
-          EOF
+        EOF
         fi
 
-        git config --global user.name 'New Pride Services'
+        git config --global user.name 'Lateralus138'
         git config --global user.email 'Lateralus138@users.noreply.github.com'
         git add docs/json/*.json
         git commit --allow-empty -m "Update SHA256 hash badges. - $(date -u) UTC"
