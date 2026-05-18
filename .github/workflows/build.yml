@@ -145,46 +145,46 @@ jobs:
         if [ -f "release/txt2img-windows.exe" ]; then
           WIN_HASH=$(sha256sum release/txt2img-windows.exe | cut -d ' ' -f1)
           cat > docs/json/txt2img-windows_x64_sha256.json << EOF
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-windows.exe SHA256",
-  "message": "${WIN_HASH}",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "windows"
-}
-EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-windows.exe SHA256",
+            "message": "${WIN_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "windows"
+          }
+          EOF
         fi
 
         if [ -f "release/txt2img-linux" ]; then
           LINUX_HASH=$(sha256sum release/txt2img-linux | cut -d ' ' -f1)
           cat > docs/json/txt2img-linux_x64_sha256.json << EOF
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-linux SHA256",
-  "message": "${LINUX_HASH}",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "linux"
-}
-EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-linux SHA256",
+            "message": "${LINUX_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "linux"
+          }
+          EOF
         fi
 
         if [ -f "release/txt2img-macos" ]; then
           MACOS_HASH=$(sha256sum release/txt2img-macos | cut -d ' ' -f1)
           cat > docs/json/txt2img-macos_x64_sha256.json << EOF
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-macos SHA256",
-  "message": "${MACOS_HASH}",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "apple"
-}
-EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img-macos SHA256",
+            "message": "${MACOS_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "apple"
+          }
+          EOF
         fi
 
         # Debian SHA256
@@ -192,32 +192,32 @@ EOF
         if [ -f "$DEB_FILE" ]; then
           DEB_HASH=$(sha256sum "$DEB_FILE" | cut -d ' ' -f1)
           cat > docs/json/txt2img-linux_deb_sha256.json << EOF
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img.deb SHA256",
-  "message": "${DEB_HASH}",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "debian"
-}
-EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img.deb SHA256",
+            "message": "${DEB_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "debian"
+          }
+          EOF
         fi
 
         # Flatpak SHA256
         if [ -f "release/txt2img.flatpak" ]; then
           FLATPAK_HASH=$(sha256sum release/txt2img.flatpak | cut -d ' ' -f1)
           cat > docs/json/txt2img-linux_flatpak_sha256.json << EOF
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img.flatpak SHA256",
-  "message": "${FLATPAK_HASH}",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "flathub"
-}
-EOF
+          {
+            "schemaVersion": 1,
+            "color": "2E9778",
+            "label": "txt2img.flatpak SHA256",
+            "message": "${FLATPAK_HASH}",
+            "labelColor": "1d1d1d",
+            "style": "for-the-badge",
+            "namedLogo": "flathub"
+          }
+          EOF
         fi
 
         git config --global user.name 'New Pride Services'
