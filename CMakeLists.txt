@@ -118,6 +118,11 @@ if(LINUX)
                     OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/txt2img.1.gz")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/txt2img.1.gz"
             DESTINATION "share/man/man1")
+
+    # Bash completion
+    install(FILES "debian/txt2img.bash-completion"
+            DESTINATION "share/bash-completion/completions"
+            RENAME "${PROJECT_NAME}")
 endif()
 
 # CPack configuration

@@ -1,26 +1,82 @@
-.TH TXT2IMG 1 "May 2026" "txt2img 1.0.0" "User Commands"
+.TH TXT2IMG 1 "May 2026" "txt2img" "User Commands"
 .SH NAME
-txt2img \- Render wrapped text into an image
+txt2img \- Render ANSI-styled text into images
 .SH SYNOPSIS
 .B txt2img
-[\fIOPTIONS\fR] \fIIMAGE_FILE\fR
+[\fB\-W\fR \fIwidth\fR] [\fIOPTIONS\fR] [\fIFILE\fR]
+.br
+.B cat
+\fIFILE\fR |
+.B txt2img
+\fB\-W\fR \fIwidth\fR [\fIOPTIONS\fR]
 .SH DESCRIPTION
-txt2img is a cross-platform command-line utility designed for rendering wrapped text into images.
-It supports ANSI styles, word wrapping, and multi-page output.
+.B txt2img
+is a command-line utility that renders text into high-quality images. It supports ANSI escape sequences for colors and styles (bold, italic), automatic word wrapping, and multi-page output.
+.PP
+If \fIFILE\fR is specified, input is read from the file. If \fIFILE\fR is omitted or is '\-', input is read from standard input.
 .SH OPTIONS
 .TP
-\fB\-h, \-\-help\fR
-Show help message
+\fB\-v\fR, \fB\-\-version\fR
+Show version information and exit.
 .TP
-\fB\-v, \-\-version\fR
-Show version information
+\fB\-h\fR, \fB\-\-help\fR
+Show a help message and exit.
 .TP
-\fB\-W, \-\-width\fR \fIWIDTH\fR
-Specify the width for wrapping
+\fB\-t\fR, \fB\-\-text\fR \fITEXT\fR
+Provide text directly as a command-line argument. Use '\\n' for newlines.
 .TP
-\fB\-n, \-\-output\fR \fIFILE\fR
-Specify the output filename
+\fB\-W\fR, \fB\-\-width\fR \fIWIDTH\fR
+Set the image width in pixels. This is a required parameter.
+.TP
+\fB\-H\fR, \fB\-\-height\fR \fIHEIGHT\fR
+Set the maximum image height. If the content exceeds this height, multiple images will be generated.
+.TP
+\fB\-T\fR, \fB\-\-trim\-height\fR
+Trim the image height to fit the content exactly (only applicable if \fB\-\-height\fR is set).
+.TP
+\fB\-r\fR, \fB\-\-raw\fR
+Disable ANSI escape sequence parsing and render text exactly as-is.
+.TP
+\fB\-n\fR, \fB\-\-file\-name\fR \fINAME\fR
+Set the output filename (default: output.png). For multi-page output, names will be suffixed with _1, _2, etc.
+.TP
+\fB\-o\fR, \fB\-\-output\-directory\fR \fIDIR\fR
+Set the directory where output images will be saved (default: current directory).
+.TP
+\fB\-\-fg\fR \fICOLOR\fR
+Set the default foreground color using a hex string (e.g., "#222222" or "222222").
+.TP
+\fB\-\-bg\fR \fICOLOR\fR
+Set the default background color using a hex string (e.g., "#f6efdf").
+.TP
+\fB\-\-font\fR \fIPATH\fR
+Path to a specific TrueType (TTF) or OpenType (OTF) font file.
+.TP
+\fB\-\-font\-size\fR \fISIZE\fR
+Set the font size in pixels (default: 20).
+.TP
+\fB\-\-padding\fR \fIPIXELS\fR
+Set the padding around the text in pixels (default: 20).
+.TP
+\fB\-\-tabsize\fR \fIWIDTH\fR
+Set the tab stop width (default: 4).
+.SH EXAMPLES
+Render a file to an image with a width of 800 pixels:
+.IP
+txt2img -W 800 input.txt
+.PP
+Render direct text with custom colors:
+.IP
+txt2img -W 400 --fg "#ffffff" --bg "#000000" -t "Hello World\nThis is a test"
+.PP
+Pipe output from another command:
+.IP
+ls -la --color=always | txt2img -W 1000 -n directory_listing.png
 .SH AUTHOR
 Ian Pride <faithnomoread@yahoo.com>
-.SH SEE ALSO
-https://github.com/Lateralus138/txt2img
+.SH REPORTING BUGS
+https://github.com/Lateralus138/txt2img/issues
+.SH COPYRIGHT
+Copyright \(co 2026 New Pride Services.
+.br
+License: Commercial License (see COMMERCIAL_LICENSE.md) or MIT License (see LICENSE).
