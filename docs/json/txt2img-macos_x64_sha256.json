@@ -1,9 +1,9 @@
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-macos SHA256",
-  "message": "pending",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "apple"
-}
+  {
+    "schemaVersion": 1,
+    "color": "2E9778",
+    "label": "txt2img-macos SHA256",
+    "message": "7e7f977d30ff7b40610a9569a6ec0c3d1e37d4547e9a1b5620aef8f50e8c73b7",
+    "labelColor": "1d1d1d",
+    "style": "for-the-badge",
+    "namedLogo": "apple"
+  }

@@ -1,9 +1,9 @@
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-linux SHA256",
-  "message": "pending",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "linux"
-}
+  {
+    "schemaVersion": 1,
+    "color": "2E9778",
+    "label": "txt2img-linux SHA256",
+    "message": "70f6152ea65c90e72646f80cc2d35004a14289a6a68f9586bfa761d7d48f60fc",
+    "labelColor": "1d1d1d",
+    "style": "for-the-badge",
+    "namedLogo": "linux"
+  }

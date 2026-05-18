@@ -1,9 +1,9 @@
-{
-  "schemaVersion": 1,
-  "color": "2E9778",
-  "label": "txt2img-windows.exe SHA256",
-  "message": "pending",
-  "labelColor": "1d1d1d",
-  "style": "for-the-badge",
-  "namedLogo": "windows"
-}
+  {
+    "schemaVersion": 1,
+    "color": "2E9778",
+    "label": "txt2img-windows.exe SHA256",
+    "message": "b76cb4cbfd1463ff9d094a993c6db9cd44a11fe643bf83914a81b0eca7d57796",
+    "labelColor": "1d1d1d",
+    "style": "for-the-badge",
+    "namedLogo": "windows"
+  }
