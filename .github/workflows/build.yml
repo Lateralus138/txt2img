@@ -136,7 +136,7 @@ jobs:
         fi
         ls -lh release/
 
-    - name: Generate and Commit SHA256 JSON Badges
+    - name: Generate and Commit SHA256 JSON Badges and Update Manifests
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: |
         mkdir -p docs/json
@@ -219,10 +219,24 @@ jobs:
         EOF
         fi
 
+        # Update Local Manifest with latest Tag and Commit (if this was a tag push)
+        # In this specific block (ref == master), we don't have a tag yet usually, 
+        # but we can sync the manifest to the current master commit.
+        CURRENT_COMMIT=$(git rev-parse HEAD)
+        VERSION=$(cat VERSION)
+        if [[ ! $VERSION =~ ^v ]]; then VERSION="v$VERSION"; fi
+        
+        sed -i "s/\(tag: \).*/\1$VERSION/" flathub/com.github.Lateralus138.txt2img.yaml
+        sed -i "s/\(commit: \).*/\1$CURRENT_COMMIT/" flathub/com.github.Lateralus138.txt2img.yaml
+        
+        # Update AppStream releases for master
+        CURRENT_DATE=$(date +%Y-%m-%d)
+        sed -i '/<releases>/,/<\/releases>/c\  <releases>\n    <release version="'"$VERSION"'" date="'"$CURRENT_DATE"'" />\n  </releases>' docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+
         git config --global user.name 'Lateralus138'
         git config --global user.email 'Lateralus138@users.noreply.github.com'
-        git add docs/json/*.json
-        git commit --allow-empty -m "Update SHA256 hash badges. - $(date -u) UTC"
+        git add docs/json/*.json flathub/com.github.Lateralus138.txt2img.yaml docs/media/com.github.Lateralus138.txt2img.metainfo.xml
+        git commit --allow-empty -m "Update SHA256 hashes and Flatpak manifest. - $(date -u) UTC"
         git push origin master
 
     - name: Read Version
