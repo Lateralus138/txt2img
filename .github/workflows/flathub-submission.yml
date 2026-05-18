@@ -42,7 +42,7 @@ jobs:
 
     - name: Build and Test Flatpak
       run: |
-        flatpak-builder --user --disable-ro-bind --repo=repo --force-clean build-dir flathub/com.github.Lateralus138.txt2img.yaml
+        flatpak-builder --user --repo=repo --force-clean build-dir flathub/com.github.Lateralus138.txt2img.yaml
         flatpak build-bundle repo txt2img-test.flatpak com.github.Lateralus138.txt2img
 
     - name: Upload Test Bundle
