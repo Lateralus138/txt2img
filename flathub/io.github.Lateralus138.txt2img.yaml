@@ -18,7 +18,7 @@ modules:
       - type: git
         url: https://github.com/Lateralus138/txt2img.git
         tag: v1.0.0
-        commit: cc5318730156f5502433cc33cfc88ebeb7b3703d
+        commit: 029c0c4d0fe91cfe73d7492fe5aad68b1bb89629
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_STATIC=OFF
