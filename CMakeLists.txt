@@ -85,20 +85,20 @@ if(UNIX AND NOT APPLE)
     include(GNUInstallDirs)
 
     # Desktop file
-    install(FILES "docs/media/com.github.Lateralus138.txt2img.desktop"
+    install(FILES "docs/media/io.github.Lateralus138.txt2img.desktop"
             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
     
     # AppStream metainfo
-    install(FILES "docs/media/com.github.Lateralus138.txt2img.metainfo.xml"
+    install(FILES "docs/media/io.github.Lateralus138.txt2img.metainfo.xml"
             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/metainfo")
     
     # Icons (hicolor theme)
     set(ICON_SIZES 16 32 48 64 128 256)
     foreach(SIZE ${ICON_SIZES})
-        install(FILES "docs/media/icons/hicolor/${SIZE}x${SIZE}/apps/com.github.Lateralus138.txt2img.png"
+        install(FILES "docs/media/icons/hicolor/${SIZE}x${SIZE}/apps/io.github.Lateralus138.txt2img.png"
                 DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${SIZE}x${SIZE}/apps")
     endforeach()
-    install(FILES "docs/media/icons/hicolor/scalable/apps/com.github.Lateralus138.txt2img.svg"
+    install(FILES "docs/media/icons/hicolor/scalable/apps/io.github.Lateralus138.txt2img.svg"
             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
     # Documentation (Debian style)
